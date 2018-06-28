@@ -1,7 +1,11 @@
-nclude<iostream>
-#include<string>
+nclude<iostream>#include<vector>
+#include<stdlib.h>
+#include<iostream>
 #include<cstring>
 #include<fstream>
+#include<string>>
+#include<algorithm>
+#include"Sequence.h"
 using namespace std;
 Sequence::Sequence(string filename)
 {
@@ -18,12 +22,12 @@ Sequence::Sequence(string filename)
 }
 int Sequence::length()
 {
-	return sizeof(DNA);
+	return DNA.length();
 }
 int Sequence::numberOf(char base)
 {
 	long long number = 0;
-	for (int i = 0; i<sizeof(DNA); i++)
+	for (int i = 0; i<DNA.length(); i++)
 	{
 		if (DNA[i] == base)
 			number++;
@@ -33,11 +37,11 @@ int Sequence::numberOf(char base)
 string Sequence::longestConsecutive()
 {
 	int k1 = 0; char DNAm;
-	for (int i = 0; i<sizeof(DNA); i++)
+	for (int i = 0; i<DNA.length(); i++)
 	{
 		int k2 = 0;
 
-		for (int j = i + 1; j<sizeof(DNA); j++)
+		for (int j = i + 1; j<DNA.length(); j++)
 		{
 			if (DNA[j] == DNA[i])
 				k2++;
@@ -51,57 +55,53 @@ string Sequence::longestConsecutive()
 		}
 	}
 	string LongDNA;
-	for (int i = 0; i<k1; i++)
+	for (int i = 0; i<=k1; i++)
 		LongDNA+=DNAm;
 	return LongDNA;
 
 }
-char A[2000000], *B[20000000];
 string Sequence::longestRepeated()
 {
-	for (int i = 0; i < sizeof(DNA); i++)
+        int maxcommonlength = 0;
+	string repeat;
+	vector<string> dna(DNA.length());
+
+	for (int i = 0; i < DNA.size(); i++)
+		dna[i] = DNA.substr(DNA.length() - i - 1, i + 1);
+	sort(dna.begin(), dna.end());
+
+	for (int i = 0; i < dna.size() - 1; i++)
 	{
-		A[i] = DNA[i];
-		B[i] = &A[i];
-    }
-	B[sizeof(DNA)] = 0;
-	B[sizeof(DNA) + 1] = 0;
+		string c = dna[i];
+		string s = dna[i + 1];
 
-	qsort(B, sizeof(DNA), sizeof(char*), ZAT);
-
-	string Repeated;
-	int max1 = -1, t, pos = 0;
-	for (int i = 0; i < sizeof(DNA); i++)
-	{
-		t = R(B[i - 1], B[1]);
-			if (t>max1)
-			{
-				max1 = t;
-				pos = i;
-			}
-
-	}
-
-				for (int i = 0; i < max1; i++)
-			{
-				Repeated += B[pos][i];
-			}
-			return Repeated;
-	
-	}
-int Sequence::R(char*a, char*b)
-	{
-		int i = 0;
-		while (*a&&(*a++==*b++))
+		int t = 0;
+		for (int j = 0; j < min(c.length(), s.length()); j++)
 		{
-			i++;
+			if (c[j] != s[j])
+			{
+				t = 0;
+				break;
+			}
+			else
+				t++;
+			if (maxcommonlength < t)
+			{
+				maxcommonlength = t;
+				repeat = s.substr(0, maxcommonlength);
+			}
 		}
-		return i;
-     }
-int ZAT(const void *a, const void *b)
+	}
+return repeat;
+}
+int Sequence::comlen(char *p, char *q)
 {
-	char **pa = (char**)a;
-	char **pb = (char**)b;
-	return strcmp(*pa, *pb);
-
+	int i = 0;
+	while (*p && (*p++ == *q++))
+		++i;
+	return i;
+}
+int Sequence::pstrcmp(const void *p1, const void *p2)
+{
+	return strcmp(*(char* const *)p1, *(char *const*)p2);
 }
