@@ -1,9 +1,10 @@
-nclude<iostream>#include<vector>
+#include<iostream>
+#include<vector>
 #include<stdlib.h>
 #include<iostream>
 #include<cstring>
 #include<fstream>
-#include<string>>
+#include<string>
 #include<algorithm>
 #include"Sequence.h"
 using namespace std;
